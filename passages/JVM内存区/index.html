@@ -210,6 +210,86 @@
       <h1 id="JVM结构"><a href="#JVM结构" class="headerlink" title="JVM结构"></a>JVM结构</h1><p><img src="https://i.loli.net/2021/04/22/5B8UNP9Qy3AVn7c.png" alt="image-20210422104309962"></p>
 <p>​        方法区与Java堆一样，被所有的线程共享。方法区中定义了所有的字段和方法字节码，以及一些特殊的方法，如构造函数、接口代码。简单说所有定义的方法的信息都保存在该区域，<strong>方法区属于共享区域</strong></p>
 <p>​        ==静态变量、常量、类信息（构造方法、接口定义）、运行时的常量池存放在方法区中==。实例变量存放在堆内存中，与方法区无关。</p>
+<h2 id="创建对象在JVM中的发生过程"><a href="#创建对象在JVM中的发生过程" class="headerlink" title="创建对象在JVM中的发生过程"></a>创建对象在JVM中的发生过程</h2><ul>
+<li><p>方法区中存储类模板的信息、常量等信息</p>
+</li>
+<li><p>对象的引用放置于栈内存中，含有指向堆内存的地址</p>
+</li>
+<li><p>对象的实际存储放置于堆内存中</p>
+</li>
+</ul>
+<p><strong>下面为JVM中创建对象示意图。</strong><br>  <img src="https://i.loli.net/2021/04/22/Zlyj76AvN1Sq4aV.png" alt="image-20210422151310785"></p>
+<h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><p>栈内存，主管线程的运行，生命周期和线程同步；线程结束，栈内存也就被释放了。对应栈来说不存在垃圾结束问题，一旦线程结束栈就结束了。</p>
+<p>栈中的内容：</p>
+<ul>
+<li>八大基本类型</li>
+<li>对象的引用</li>
+<li>实例的方法</li>
+</ul>
+<p>栈的运行原理 ： 栈帧</p>
+<p><img src="https://i.loli.net/2021/04/22/nP5Fw7xTYVZLHpk.png" alt="image-20210422152807666"></p>
+<p>类的创建过程，栈的引用</p>
+<p><img src="https://i.loli.net/2021/04/22/GOs9uJIhSbkUPjT.png" alt="image-20210422153110066"></p>
+<h2 id="堆（Heap）"><a href="#堆（Heap）" class="headerlink" title="堆（Heap）"></a>堆（Heap）</h2><p>一个JVM只有一个堆内存，堆内存的大小是可以调节的</p>
+<p><img src="https://i.loli.net/2021/04/22/61q4W7D2Ry8JtLX.png" alt="image-20210422154950908"></p>
+<p>GC垃圾回收主要在新生区和养老区，假设堆内存不足，产生OOM错误</p>
+<p><strong>在jdk8以后，永久存储区有另一个名字（元空间）</strong></p>
+<h3 id="新生区"><a href="#新生区" class="headerlink" title="新生区"></a>新生区</h3><p>类：诞生、成长和死亡的地方</p>
+<p>伊甸园区 ：所有对象都在伊甸园区new出来</p>
+<p>99%的对象都是临时对象</p>
+<h3 id="永久区"><a href="#永久区" class="headerlink" title="永久区"></a>永久区</h3><p>永久区常驻内存。用来存放JDK自身携带的Class对象，Interface元数据，存储的是Java运行时的一些环境或类信息，这个区域不存在垃圾回收，关闭虚拟机会释放这个区域的内存。</p>
+<ul>
+<li> jdk1.6之前 ： 永久代，常量池在方法区中</li>
+<li> jdk1.7 ：永久代，慢慢退化了 <code>去永久代</code>，常量池在堆中</li>
+<li> jdk1.8之后 ：无永久代，常量池在元空间</li>
+</ul>
+<p><img src="https://i.loli.net/2021/04/22/DA6J3IOpUxLSRzZ.png" alt="image-20210422163139670"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> per.jvm.lesson1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Heap1</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> total = Runtime.getRuntime().totalMemory();</span><br><span class="line">        <span class="keyword">long</span> max = Runtime.getRuntime().maxMemory();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;max = &quot;</span>+max+<span class="string">&quot;字节\t&quot;</span>+(<span class="keyword">double</span>)(max/<span class="number">1024</span>/<span class="number">1024</span>)+<span class="string">&quot;MB&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;total = &quot;</span>+max+<span class="string">&quot;字节\t&quot;</span>+(<span class="keyword">double</span>)(total/<span class="number">1024</span>/<span class="number">1024</span>)+<span class="string">&quot;MB&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//默认情况下 为jvm分配的总内存是电脑内存的1/4、初始化内存为电脑内存的1/64</span></span><br><span class="line">        <span class="comment">//可以通过参数调节内存的分配</span></span><br><span class="line">        <span class="comment">//-Xms1024m -Xmx1024m -XX:+PrintGCDetails</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// OOM</span></span><br><span class="line">        <span class="comment">// 1.尝试扩大堆内存查看结果</span></span><br><span class="line">        <span class="comment">// 2.尝试分析内存，查看哪个地方出现问题</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Heap</span><br><span class="line"> PSYoungGen      total 305664K, used 20971K [0x00000000eab00000, 0x0000000100000000, 0x0000000100000000)</span><br><span class="line">  eden space 262144K, 8% used [0x00000000eab00000,0x00000000ebf7afb8,0x00000000fab00000)</span><br><span class="line">  from space 43520K, 0% used [0x00000000fd580000,0x00000000fd580000,0x0000000100000000)</span><br><span class="line">  to   space 43520K, 0% used [0x00000000fab00000,0x00000000fab00000,0x00000000fd580000)</span><br><span class="line"> ParOldGen       total 699392K, used 0K [0x00000000c0000000, 0x00000000eab00000, 0x00000000eab00000)</span><br><span class="line">  object space 699392K, 0% used [0x00000000c0000000,0x00000000c0000000,0x00000000eab00000)</span><br><span class="line"> Metaspace       used 3202K, capacity 4496K, committed 4864K, reserved 1056768K</span><br><span class="line">  class space    used 344K, capacity 388K, committed 512K, reserved 1048576K</span><br></pre></td></tr></table></figure>
+
+<p>元空间逻辑上存在，物理上不存在？</p>
+<p>根据上述示例，新生代加上老年代占据的大小为1005056字节既981.5MB,这个大小等于为JVM分配的大小。所以说物理上不存在。</p>
+<hr>
+<p>在一个项目中出现OOM故障，如何排除？</p>
+<ul>
+<li>快照分析工具 ， 看到代码第几行出错 （MAT、Jprofiler）</li>
+<li>DeBug</li>
+</ul>
+<p>MAT、Jprofiler的作用</p>
+<ol>
+<li>分析Dump内存文件，快速定位泄露</li>
+<li>获得堆中的数据</li>
+<li>获得大的对象</li>
+<li>…</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//-Xms1m -Xmx8m -XX:+HeapDumpOnOutOfMemoryError</span></span><br><span class="line"><span class="comment">//Xms 初始化内存分配大小</span></span><br><span class="line"><span class="comment">//Xmx 最大分配内存</span></span><br><span class="line"><span class="comment">//-XX:+HeapDumpOnOutOfMemoryError dump文件</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OOMDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">byte</span>[] array = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>*<span class="number">1024</span>];</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ArrayList&lt;OOMDemo&gt; objects = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">                objects.add(<span class="keyword">new</span> OOMDemo());</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (OutOfMemoryError e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.out.println(count);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="GC"><a href="#GC" class="headerlink" title="GC"></a>GC</h2><p>GC题目：</p>
+<ul>
+<li>JVM的内存模型和分区？</li>
+<li>堆里面的分区有哪些 ？eden , from ,to,老年区，说说他们的特点</li>
+<li>GC的算法有哪些？ 标记清楚法、标记压缩、复制算法、引用计数器</li>
+<li>轻GC和重GC分别什么时候用？</li>
+</ul>
+<h3 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h3><p><img src="https://i.loli.net/2021/04/22/OBfRgxdTKFUqewA.png" alt="image-20210422191616769"></p>
+<h3 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h3><p>复制算法主要作用于新生区中</p>
+<p><img src="https://i.loli.net/2021/04/22/YKT3x92OyhRjqZI.png" alt="image-20210422193029555"></p>
+<p><img src="https://i.loli.net/2021/04/22/KaNT2dLJu8k3FR1.png" alt="image-20210422193714848"></p>
+<p>好处： 没有内存碎片</p>
+<p>缺点： 浪费了内存空间，多了一半空间永远为空。</p>
+<p>复制算法最佳使用场景：对象存活度较低，既在新生区时</p>
+<h3 id="标记清除算法"><a href="#标记清除算法" class="headerlink" title="标记清除算法"></a>标记清除算法</h3><p><img src="https://i.loli.net/2021/04/22/9PAiV2OnUWTE3sw.png" alt="image-20210422194127682"></p>
+<p>优点：不需要额外空间</p>
+<p>缺点：两次扫描浪费时间、会产生内存碎片</p>
+<h3 id="标记压缩算法"><a href="#标记压缩算法" class="headerlink" title="标记压缩算法"></a>标记压缩算法</h3><p><img src="https://i.loli.net/2021/04/22/WrLbf5MqyTYCxXA.png" alt="image-20210422194556184"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p> 内存效率：复制算法&gt;标记清除算法&gt;标记压缩算法（时间复杂度）</p>
+<p> 内存整齐度：复制算法=标记压缩算法&gt;标记清除算法</p>
+<p> 内存利用率：标记压缩算法=标记清除算法&gt;复制算法</p>
+<p>难道没有最优算法吗？</p>
+<p>答案：没有，没有最好的算法，只有最合适的算法…&gt;GC:分代收集算法</p>
+<p>年轻代：存活率低适合复制算法</p>
+<p>老年代：标记清除+标记压缩</p>
     </div>
   </div>
   
@@ -284,6 +364,12 @@
         <a href="/passages/flask/" target="_self">Flask创建</a>
       </div>
     
+    
+      <div class="nav-next">
+        下一篇:
+        <a href="/passages/JMM/" target="_self">JMM</a>
+        <i class="iconfont icon-next"></i>
+      </div>
     
   </nav>
 
