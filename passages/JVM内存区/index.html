@@ -8,12 +8,12 @@
   
   
   
-  <title>归档: 2021/4 | WZY&#39;s Blog</title>
+  <title>JVM内存区 | WZY&#39;s Blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="Hexo, theme-bmw" />
+    <meta name="keywords" content="JAVA,JVM,JAVA," />
   
 
   <script>
@@ -170,57 +170,129 @@
   })
 </script>
 
-      <div class="container">
-  <div class="timeline">
-  <span class="archive-move-on"></span>
-  <span class="archive-page-counter">
-    
-      <span>Wow! 一共有 2 篇文章</span>
-    
-  </span>
+      
+
+
+
+
+
+
+
+
+<div class="container post-index">
+
   
+
+<div class="post">
+  <h1 class="article-title">
+    <span>JVM内存区</span>
+  </h1>
+  <div class="article-top-meta">
+    <span>
+      发布 : 
+      2021-04-21
+    </span>
+    
+      <span>
+        分类 : 
+          <a href="/categories/JAVA/">
+            JAVA
+          </a>
+      </span>
+    
+    
+  </div>
+
   
-    <div class="collection-title">
-      <h2>
-        <span>2021</span>
-      </h2>
+
+  <div class="article-content">
+    <div class="markdown-body">
+      <h1 id="JVM结构"><a href="#JVM结构" class="headerlink" title="JVM结构"></a>JVM结构</h1><p><img src="https://i.loli.net/2021/04/22/5B8UNP9Qy3AVn7c.png" alt="image-20210422104309962"></p>
+<p>​        方法区与Java堆一样，被所有的线程共享。方法区中定义了所有的字段和方法字节码，以及一些特殊的方法，如构造函数、接口代码。简单说所有定义的方法的信息都保存在该区域，<strong>方法区属于共享区域</strong></p>
+<p>​        ==静态变量、常量、类信息（构造方法、接口定义）、运行时的常量池存放在方法区中==。实例变量存放在堆内存中，与方法区无关。</p>
+    </div>
+  </div>
+  
+    <div class="copy-right">
+      <div class="markdown-body">
+        <blockquote>
+        
+        
+          本文作者 : WangZhiYuan <br/>
+        
+        原文链接 : <a href="">http://example.com/passages/JVM%E5%86%85%E5%AD%98%E5%8C%BA/</a><br>
+        版权声明 : 本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+        </blockquote>
+      </div>
     </div>
   
   
   
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/passages/JVM%E5%86%85%E5%AD%98%E5%8C%BA/">
-          <span>JVM内存区</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        04-21
-      </div>
-    </header>
-  </article>
+    <div class="social-share"
+  style="margin-top: -2rem"
+  data-wechat-qrcode-title="<p>微信扫一扫</p>"
+  data-wechat-qrcode-helper="<p>微信右上角, 扫一扫分享</p>"
+   data-sites="qzone, qq, weibo, wechat, douban" 
   
-  
-  <article class="posts-collapse">
-    <header>
-      <h2>
-        <a href="/passages/flask/">
-          <span>Flask创建</span>
-        </a>
-      </h2>
-      <div class="post-meta">
-        04-21
-      </div>
-    </header>
-  </article>
-  
+>
+  <span style="color: #6b7487; font-size: 1.4rem;">分享到: </span>
 </div>
-  <nav class="page-navigation">
+<script src="https://cdn.bootcss.com/social-share.js/1.0.16/js/social-share.min.js" async>
+  
+
+  
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+      <span>
+        
+          <i class="iconfont icon-06tags"></i>标签: 
+          
+          <span class="span--tag">
+            <a href="/tags/JVM/">
+              #JVM
+            </a>
+          </span>
+          
+          <span class="span--tag">
+            <a href="/tags/JAVA/">
+              #JAVA
+            </a>
+          </span>
+          
+        
+      </span>
+    </div>
+    <div class="article-meta pull-right">
+    </div>
+  </div>
+</div>
+
+
+  <aside id="sidebar">
+    <p id="sidebar-header"></p>
+    <ol id="sidebar-toc"></ol>
+  </aside>
+  <script async>setTimeout(generateToc, 10);</script>
+
+
+  <nav class="post-navigation">
+    
+      <div class="nav-pre">
+        <i class="iconfont icon-prev"></i>
+        上一篇:
+        <a href="/passages/flask/" target="_self">Flask创建</a>
+      </div>
     
     
   </nav>
+
+   
+
+   
+
 </div>
+
 
       <footer>
   <p class="site-info">
